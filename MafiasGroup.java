@@ -3,5 +3,6 @@ public abstract class MafiasGroup extends Roles{
 
     protected MafiasGroup(){
         isMafia = true;
+        isNightPlayer =  true;
     }
 }

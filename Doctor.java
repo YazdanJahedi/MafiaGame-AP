@@ -1,9 +1,8 @@
 public class Doctor extends VillagersGroup {
-    protected static final int MAX_LIVE = 1;
-
 
     public Doctor() {
         NUMBER_OF_VILLAGERS++;
+        isNightPlayer = true;
     }
 
     /**
@@ -14,10 +13,10 @@ public class Doctor extends VillagersGroup {
      */
     public void cure(Player player) {
         if (player != null) {
-            if (!player.isAlive()) {
+            if (!player.isAlive) {
                 System.out.println("user is dead");
-            } else if (player.isAlive() && player.isTicked()) {
-                player.getRole().lives++;
+            } else if (player.isAlive && player.isTicked) {
+                player.isTicked = false;
             }
         }
     }

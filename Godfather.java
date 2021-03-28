@@ -1,5 +1,4 @@
 public class Godfather extends MafiasGroup{
-    protected static final int MAX_LIVE = 1;
 
     public Godfather() {
         NUMBER_OF_MAFIAS++;

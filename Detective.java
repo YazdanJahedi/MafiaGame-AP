@@ -1,8 +1,8 @@
 public class Detective extends VillagersGroup {
-    protected static final int MAX_LIVE = 1;
 
     public Detective() {
         NUMBER_OF_VILLAGERS++;
+        isNightPlayer = true;
     }
 
     /**
@@ -14,7 +14,7 @@ public class Detective extends VillagersGroup {
      */
     public boolean inquiry(String playerName) {
         if (Main.findPlayer(playerName) != null) {
-            return Main.findPlayer(playerName).getRole().isMafia;
+            return Main.findPlayer(playerName).role.isMafia;
         }
         // if player wasn't found :
         return false;

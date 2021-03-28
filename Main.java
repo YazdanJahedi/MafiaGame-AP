@@ -34,8 +34,8 @@ public class Main {
         System.err.println("_____________________________");
         System.err.println("** Alive players in the game:");
         for (int i = 0; i < numberOfPlayers; i++) {
-            if(players[i].isAlive()){
-                System.out.println(players[i].getName() + ": "+ players[i].getRole());
+            if(players[i].isAlive){
+                System.out.println(players[i].getName() + ": "+ players[i].role);
             }
         }
         System.out.println();
@@ -47,10 +47,11 @@ public class Main {
 
     public static void saveChangesAndReset(){
         for (int i = 0; i < numberOfPlayers; i++) {
-            players[i].setSilenced(false);
-            players[i].setTicked(false);
+            players[i].isSilenced = false;
+            players[i].isTicked= false;
             players[i].resetVote();
-            if (players[i].getRole().lives == 0){
+            if (!players[i].isAlive){
+                // todo : fekr konam shart khoon nsit
                 players[i].isKilled();
             }
 

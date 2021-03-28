@@ -1,5 +1,4 @@
 public class Silencer extends MafiasGroup{
-    protected static final int MAX_LIVE = 1;
 
     public Silencer() {
         NUMBER_OF_MAFIAS++;
@@ -7,7 +6,7 @@ public class Silencer extends MafiasGroup{
 
     // the special ability of the silencer role:
     public void silence (Player player){
-        player.setSilenced(true);
+        player.isSilenced = true;
     }
 
     @Override

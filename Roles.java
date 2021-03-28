@@ -1,5 +1,5 @@
 public abstract class Roles {
-    protected boolean isMafia;
-    protected byte lives = 1;
+    boolean isMafia;
+    boolean isNightPlayer = false;
 
 }

@@ -1,9 +1,8 @@
 public class Bulletproof extends VillagersGroup{
-    protected static final int MAX_LIVE = 2;
+    boolean isOneTimeHurt = false;
 
     public Bulletproof() {
         NUMBER_OF_VILLAGERS++;
-        lives = 2 ;
     }
 
     @Override

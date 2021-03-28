@@ -1,21 +1,19 @@
 public class Player {
-    private String name;
-    private Roles role;
-    private boolean alive = true;
-    private boolean ticked = false;
-    private boolean isSilenced = false;
-    boolean voted = false;
+    String name;
+    Roles role;
+    boolean isAlive = true;
+    boolean isTicked = false;
+    boolean isSilenced = false;
+    boolean hesVoted = false;
     int numberOfVotes = 0;
 
     public Player(String name) {
         this.name = name;
     }
 
-
     public String getName() {
         return name;
     }
-
 
     public void setRole(String roleName) {
         switch (roleName) {
@@ -30,13 +28,16 @@ public class Player {
             default -> System.out.println("role not found");
         }
     }
-    public Roles getRole() {
-        return role;
-    }
 
-
+    // in the night
     public void isKilled() {
-        alive = false;
+        if(this.role instanceof Bulletproof){
+            if(!((Bulletproof) this.role).isOneTimeHurt) {
+                ((Bulletproof) this.role).isOneTimeHurt = true;
+                return;
+            }
+        }
+        isAlive = false;
 
         if (role instanceof MafiasGroup) {
             MafiasGroup.NUMBER_OF_MAFIAS--;
@@ -44,42 +45,13 @@ public class Player {
             VillagersGroup.NUMBER_OF_VILLAGERS--;
         }
     }
-    public boolean isAlive() {
-        return alive;
-    }
-
-
-    public void setTicked(boolean ticked) {
-        this.ticked = ticked;
-    }
-    public boolean isTicked() {
-        return ticked;
-    }
-
-
-    public void setSilenced(boolean silenced) {
-        isSilenced = silenced;
-    }
-    public boolean isSilenced() {
-        return isSilenced;
-    }
-
 
     public void isVoted(){
         numberOfVotes++;
     }
-    public int getNumberOfVotes() {
-        return numberOfVotes;
-    }
+
     public void resetVote(){
         numberOfVotes = 0;
     }
 
-
-    public void setVoted(boolean voted) {
-        this.voted = voted;
-    }
-    public boolean getVoted(){
-        return voted;
-    }
 }
