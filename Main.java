@@ -167,13 +167,14 @@ public class Main {
                 if(input.equals("get_game_state")){
                     printGameState();
                 }
-                //
+                // vetting vote part of the day :
                 else {
-
+                    String[] voteDate = input.split(" ");
+                    Day.gettingVoteInTheDay(voteDate);
 
                 }
             }
-            
+
 
             // Night part
             System.out.println("Night " + Night.NIGHT_NUMBER++);
