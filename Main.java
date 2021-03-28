@@ -51,15 +51,18 @@ public class Main {
         System.out.println("Vilager = " + VillagersGroup.NUMBER_OF_VILLAGERS);
     }
 
+
+    //todo: shayad behtar bashe ke in method , abstract beshe !
     public static void saveChangesAndReset() {
         for (int i = 0; i < numberOfPlayers; i++) {
             players[i].isSilenced = false;
             players[i].isTicked = false;
             players[i].resetVote();
-            if (!players[i].isAlive) {
-                // todo : fekr konam shart khoob nsit
-                players[i].isKilled();
-            }
+
+//            if (!players[i].isAlive) {
+//                // todo : fekr konam shart khoob nsit
+//                players[i].isKilled();
+//            }
 
         }
     }
@@ -71,10 +74,11 @@ public class Main {
                 max = players[i].numberOfVotes;
             }
         }
+
         return max;
     }
 
-    public static int findNumberOfMaxPlayers(){
+    public static int findNumberOfMaxPlayers() {
         int numberOfMaxPlayer = 0;
         for (int i = 0; i < numberOfPlayers; i++) {
             if (players[i].numberOfVotes == findMaxVote()) {
@@ -86,10 +90,16 @@ public class Main {
 
     public static Player[] findMaxVotedPlayers() {
         Player[] maxPlayers = new Player[findNumberOfMaxPlayers()];
+
+        System.err.println("--->  max vote is : " + findMaxVote());
+
+        System.err.println("max voted player(s) :  ");
         for (int i = 0, j = 0; i < numberOfPlayers; i++) {
             if (players[i].numberOfVotes == findMaxVote()) {
                 maxPlayers[j] = players[i];
                 j++;
+
+                System.err.print(players[i].name + "  ");
             }
         }
         return maxPlayers;
@@ -169,46 +179,75 @@ public class Main {
         }
 
 
-        // base body of the code :
+        //
+
+
+        //
+
+
+        //
+
+        //
+
+
+        String input = "";
+        //              *****    base body of the code    ***** :
         while (MafiasGroup.NUMBER_OF_MAFIAS > VillagersGroup.NUMBER_OF_VILLAGERS
                 || MafiasGroup.NUMBER_OF_MAFIAS != 0 || !Joker.hangedInDay) {
 
-            String input = "";
 
-            // Day part
+            // ++++  Day part
             System.out.println("Day " + Day.DAY_NUMBER++);
 
             while (!input.equals("end_vote")) {
                 input = scanner.nextLine();
                 if (input.equals("get_game_state")) {
                     printGameState();
+                } else if (input.startsWith("start_game")) {
+                    System.out.println("game has already started");
                 }
                 // vetting vote part of the day :
-                else {
+                else if (!input.startsWith("end_vote")){
                     String[] voteDate = input.split(" ");
                     Day.gettingVoteInTheDay(voteDate);
 
                 }
             }
+            Day.hangInTheDay();
 
 
-            // Night part
+            // ++++  Night part
             System.out.println("Night " + Night.NIGHT_NUMBER++);
 
             while (!input.equals("end_night")) {
                 input = scanner.nextLine();
                 if (input.equals("get_game_state")) {
                     printGameState();
+                } else if (input.startsWith("start_game")) {
+                    System.out.println("game has already started");
                 }
                 //
                 else {
-
-
+                    // todo
                 }
             }
 
         }
 
+
+
+        // winning alarm and ending part of the game :
+        if(Joker.hangedInDay){
+            System.out.println("Joker won!");
+        } else if (MafiasGroup.NUMBER_OF_MAFIAS == 0){
+            System.out.println("Villagers won!");
+        }else {
+            System.out.println("Mafia won!");
+        }
+
+
+        Thread.sleep(2000);
+        System.err.println("the game is over. GOODLUCK :))");
 
     }
 }

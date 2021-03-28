@@ -33,10 +33,13 @@ public class Player {
     public void isHanged() {
         isAlive = false;
 
+
         if (role instanceof MafiasGroup) {
             MafiasGroup.NUMBER_OF_MAFIAS--;
         } else if (role instanceof VillagersGroup) {
             VillagersGroup.NUMBER_OF_VILLAGERS--;
+        } else if (role instanceof Joker){
+            Joker.hangedInDay = true;
         }
     }
 
@@ -62,6 +65,7 @@ public class Player {
     }
 
     public void resetVote(){
+        this.hasVoted = false;
         numberOfVotes = 0;
     }
 

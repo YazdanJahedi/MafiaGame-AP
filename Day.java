@@ -27,9 +27,18 @@ public class Day extends Main {
         Player[] maxPlayers =findMaxVotedPlayers();
         if(maxPlayers.length ==1 ){
             maxPlayers[0].isHanged();
+
+            System.err.println(maxPlayers[0].name + " is hanged! ");
         }
         else {
             System.err.println("villagers couldn't decide who would be hanged in the day...");
+        }
+    }
+
+    public static void saveChangesAndReset() {
+        for (int i = 0; i < numberOfPlayers; i++) {
+            players[i].isSilenced = false;
+            players[i].resetVote();
         }
     }
 }
