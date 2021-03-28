@@ -45,13 +45,19 @@ public class Main {
         System.err.println("------------------------------");
     }
 
+    // this method will print number of mafias and number of villagers in the game
+    public static void printGameState(){
+        System.out.println("MAfia = " + MafiasGroup.NUMBER_OF_MAFIAS);
+        System.out.println("Vilager = " + VillagersGroup.NUMBER_OF_VILLAGERS);
+    }
+
     public static void saveChangesAndReset() {
         for (int i = 0; i < numberOfPlayers; i++) {
             players[i].isSilenced = false;
             players[i].isTicked = false;
             players[i].resetVote();
             if (!players[i].isAlive) {
-                // todo : fekr konam shart khoon nsit
+                // todo : fekr konam shart khoob nsit
                 players[i].isKilled();
             }
 
@@ -67,6 +73,8 @@ public class Main {
         }
         return max;
     }
+
+
 
 
 
@@ -140,12 +148,47 @@ public class Main {
         printPlayers();
         Thread.sleep(2000);
         System.out.println("Ready? Set! Go.");
+        for (int i = 0; i < 3; i++) {
+            System.out.println();
+        }
 
 
+        // base body of the code :
         while (MafiasGroup.NUMBER_OF_MAFIAS > VillagersGroup.NUMBER_OF_VILLAGERS
-                                    || MafiasGroup.NUMBER_OF_MAFIAS != 0 || Joker.hangedInDay) {
+                                    || MafiasGroup.NUMBER_OF_MAFIAS != 0 || !Joker.hangedInDay) {
+
+            String input = "";
+
+            // Day part
+            System.out.println("Day " + Day.DAY_NUMBER++);
+
+            while(!input.equals("end_vote")){
+                input = scanner.nextLine();
+                if(input.equals("get_game_state")){
+                    printGameState();
+                }
+                //
+                else {
 
 
+                }
+            }
+            
+
+            // Night part
+            System.out.println("Night " + Night.NIGHT_NUMBER++);
+
+            while(!input.equals("end_night")){
+                input = scanner.nextLine();
+                if(input.equals("get_game_state")){
+                    printGameState();
+                }
+                //
+                else {
+
+
+                }
+            }
 
         }
 
