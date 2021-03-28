@@ -2,11 +2,11 @@ import java.util.Scanner;
 
 public class Main {
     // static properties used in the main part
-    private static final Player[] players = new Player[100];
-    private static int numberOfPlayers = 0;  // max number of the players : 100
+    static final Player[] players = new Player[100];
+    static int numberOfPlayers = 0;  // max number of the players : 100
 
-    private static final String[] rolesName = {"mafia", "doctor", "villager", "Joker", "godfather", "bulletproof", "detective", "silencer"};
-    private static final int NUMBER_OF_ROLES = 8;
+    static final String[] rolesName = {"mafia", "doctor", "villager", "Joker", "godfather", "bulletproof", "detective", "silencer"};
+    static final int NUMBER_OF_ROLES = 8;
 
 
     public static Player findPlayer(String name) {
@@ -57,6 +57,19 @@ public class Main {
 
         }
     }
+
+    public int findMaxVotedPlayer(){
+        int max = 0 ;
+        for (int i = 0; i < numberOfPlayers; i++) {
+            if(players[i].numberOfVotes > max){
+                max = players[i].numberOfVotes;
+            }
+        }
+        return max;
+    }
+
+
+
 
 
     //   ***   MAIN PART   ***
