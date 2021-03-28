@@ -22,4 +22,14 @@ public class Day extends Main {
             }
         }
     }
+
+    public static void hangInTheDay(){
+        Player[] maxPlayers =findMaxVotedPlayers();
+        if(maxPlayers.length ==1 ){
+            maxPlayers[0].isHanged();
+        }
+        else {
+            System.err.println("villagers couldn't decide who would be hanged in the day...");
+        }
+    }
 }

@@ -46,7 +46,7 @@ public class Main {
     }
 
     // this method will print number of mafias and number of villagers in the game
-    public static void printGameState(){
+    public static void printGameState() {
         System.out.println("MAfia = " + MafiasGroup.NUMBER_OF_MAFIAS);
         System.out.println("Vilager = " + VillagersGroup.NUMBER_OF_VILLAGERS);
     }
@@ -64,20 +64,36 @@ public class Main {
         }
     }
 
-    public int findMaxVotedPlayer(){
-        int max = 0 ;
+    public static int findMaxVote() {
+        int max = 0;
         for (int i = 0; i < numberOfPlayers; i++) {
-            if(players[i].numberOfVotes > max){
+            if (players[i].numberOfVotes > max) {
                 max = players[i].numberOfVotes;
             }
         }
         return max;
     }
 
+    public static int findNumberOfMaxPlayers(){
+        int numberOfMaxPlayer = 0;
+        for (int i = 0; i < numberOfPlayers; i++) {
+            if (players[i].numberOfVotes == findMaxVote()) {
+                numberOfMaxPlayer++;
+            }
+        }
+        return numberOfMaxPlayer;
+    }
 
-
-
-
+    public static Player[] findMaxVotedPlayers() {
+        Player[] maxPlayers = new Player[findNumberOfMaxPlayers()];
+        for (int i = 0, j = 0; i < numberOfPlayers; i++) {
+            if (players[i].numberOfVotes == findMaxVote()) {
+                maxPlayers[j] = players[i];
+                j++;
+            }
+        }
+        return maxPlayers;
+    }
 
 
     //   ***   MAIN PART   ***
@@ -155,16 +171,16 @@ public class Main {
 
         // base body of the code :
         while (MafiasGroup.NUMBER_OF_MAFIAS > VillagersGroup.NUMBER_OF_VILLAGERS
-                                    || MafiasGroup.NUMBER_OF_MAFIAS != 0 || !Joker.hangedInDay) {
+                || MafiasGroup.NUMBER_OF_MAFIAS != 0 || !Joker.hangedInDay) {
 
             String input = "";
 
             // Day part
             System.out.println("Day " + Day.DAY_NUMBER++);
 
-            while(!input.equals("end_vote")){
+            while (!input.equals("end_vote")) {
                 input = scanner.nextLine();
-                if(input.equals("get_game_state")){
+                if (input.equals("get_game_state")) {
                     printGameState();
                 }
                 // vetting vote part of the day :
@@ -179,9 +195,9 @@ public class Main {
             // Night part
             System.out.println("Night " + Night.NIGHT_NUMBER++);
 
-            while(!input.equals("end_night")){
+            while (!input.equals("end_night")) {
                 input = scanner.nextLine();
-                if(input.equals("get_game_state")){
+                if (input.equals("get_game_state")) {
                     printGameState();
                 }
                 //

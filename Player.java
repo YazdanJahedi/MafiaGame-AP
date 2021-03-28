@@ -29,6 +29,17 @@ public class Player {
         }
     }
 
+    // in the day
+    public void isHanged() {
+        isAlive = false;
+
+        if (role instanceof MafiasGroup) {
+            MafiasGroup.NUMBER_OF_MAFIAS--;
+        } else if (role instanceof VillagersGroup) {
+            VillagersGroup.NUMBER_OF_VILLAGERS--;
+        }
+    }
+
     // in the night
     public void isKilled() {
         if(this.role instanceof Bulletproof){
