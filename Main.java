@@ -30,12 +30,12 @@ public class Main {
     }
 
     // this method will print all the players that are in the game (also they're alive)
-    public static void printPlayers(){
+    public static void printPlayers() {
         System.err.println("_____________________________");
         System.err.println("** Alive players in the game:");
         for (int i = 0; i < numberOfPlayers; i++) {
-            if(players[i].isAlive){
-                System.out.println(players[i].getName() + ": "+ players[i].role);
+            if (players[i].isAlive) {
+                System.out.println(players[i].getName() + ": " + players[i].role);
             }
         }
         System.out.println();
@@ -45,12 +45,12 @@ public class Main {
         System.err.println("------------------------------");
     }
 
-    public static void saveChangesAndReset(){
+    public static void saveChangesAndReset() {
         for (int i = 0; i < numberOfPlayers; i++) {
             players[i].isSilenced = false;
-            players[i].isTicked= false;
+            players[i].isTicked = false;
             players[i].resetVote();
-            if (!players[i].isAlive){
+            if (!players[i].isAlive) {
                 // todo : fekr konam shart khoon nsit
                 players[i].isKilled();
             }
@@ -129,7 +129,12 @@ public class Main {
         System.out.println("Ready? Set! Go.");
 
 
+        while (MafiasGroup.NUMBER_OF_MAFIAS > VillagersGroup.NUMBER_OF_VILLAGERS
+                                    || MafiasGroup.NUMBER_OF_MAFIAS != 0 || Joker.hangedInDay) {
 
+
+
+        }
 
 
     }

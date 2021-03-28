@@ -4,7 +4,7 @@ public class Player {
     boolean isAlive = true;
     boolean isTicked = false;
     boolean isSilenced = false;
-    boolean hesVoted = false;
+    boolean hasVoted = false;
     int numberOfVotes = 0;
 
     public Player(String name) {
@@ -46,7 +46,7 @@ public class Player {
         }
     }
 
-    public void isVoted(){
+    public void hasBeenVoted(){
         numberOfVotes++;
     }
 
