@@ -225,8 +225,8 @@ public class Main {
 
 
             // middle condition!!
-            if(MafiasGroup.NUMBER_OF_MAFIAS < VillagersGroup.NUMBER_OF_VILLAGERS
-                    && MafiasGroup.NUMBER_OF_MAFIAS != 0 && !Joker.hangedInDay){
+            if(MafiasGroup.NUMBER_OF_MAFIAS >= VillagersGroup.NUMBER_OF_VILLAGERS
+                    || MafiasGroup.NUMBER_OF_MAFIAS == 0 || Joker.hangedInDay){
                 break;
             }
 

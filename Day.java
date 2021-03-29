@@ -2,16 +2,16 @@ public class Day extends Main {
     static int DAY_NUMBER = 1;
 
 
-    public static void printPlayersHasNotVoted(){
-        int numberOfPlayersHasNotVoted = 0 ;
+    public static void printPlayersHasNotVoted() {
+        int numberOfPlayersHasNotVoted = 0;
         String[] names = new String[numberOfPlayers];
         for (int i = 0; i < numberOfPlayers; i++) {
-            if(!players[i].hasVoted && players[i].isAlive && !players[i].isSilenced){
+            if (!players[i].hasVoted && players[i].isAlive && !players[i].isSilenced) {
                 names[numberOfPlayersHasNotVoted++] = players[i].name;
             }
         }
 
-        if(numberOfPlayersHasNotVoted ==0 ){
+        if (numberOfPlayersHasNotVoted == 0) {
             System.out.println("All players voted correctly!!");
             System.out.println("use \"end_vote\" command");
         } else {
@@ -25,7 +25,6 @@ public class Day extends Main {
 
     public static void gettingVoteInTheDay(String[] voteData) {
         if (voteData.length == 2) {
-
             if (findPlayer(voteData[0]) != null && findPlayer(voteData[1]) != null) {
                 Player voter = findPlayer(voteData[0]);
                 Player votee = findPlayer(voteData[1]);
@@ -35,22 +34,23 @@ public class Day extends Main {
                     if (!voter.hasVoted) {
                         if (!voter.isSilenced) {
                             voter.hasVoted = true;
-                            printPlayersHasNotVoted();
                         } else {
-                            System.out.println("voter is silenced");
+                            System.err.println("voter is silenced");
                         }
                     } else {
                         System.err.println("voter has voted before .player can't vote two times");
                     }
+
+                    // votee part
+                    if (votee.isAlive) {
+                        votee.hasBeenVoted();
+                        printPlayersHasNotVoted();
+                    } else {
+                        System.err.println("votee already dead");
+                        voter.hasVoted = false;
+                    }
                 } else {
                     System.err.println("voter is dead");
-                }
-
-                // votee part
-                if (votee.isAlive) {
-                    votee.hasBeenVoted();
-                } else {
-                    System.out.println("votee already dead");
                 }
             }
         } else {
