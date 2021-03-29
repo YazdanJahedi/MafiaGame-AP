@@ -30,27 +30,22 @@ public class Main {
     }
 
     // this method will print all the players that are in the game (also they're alive)
-    public static void printPlayers() {
+    // also this method will print number of mafias and number of villagers in the game
+    public static void printGameState() throws InterruptedException {
         System.err.println("_____________________________");
+        System.out.println("number of mafias: " + MafiasGroup.NUMBER_OF_MAFIAS);
+        System.out.println("number of villagers: " + VillagersGroup.NUMBER_OF_VILLAGERS);
+        System.out.println("is there any Joker: " + Joker.assignedJokerRole);
+        System.out.println();
+        Thread.sleep(500);
         System.err.println("** Alive players in the game:");
         for (int i = 0; i < numberOfPlayers; i++) {
             if (players[i].isAlive) {
                 System.out.println(players[i].getName() + ": " + players[i].role);
             }
         }
-        System.out.println();
-        System.err.println("number of mafias: " + MafiasGroup.NUMBER_OF_MAFIAS);
-        System.err.println("number of villagers: " + VillagersGroup.NUMBER_OF_VILLAGERS);
-        System.err.println("is there any Joker: " + Joker.assignedJokerRole);
         System.err.println("------------------------------");
     }
-
-    // this method will print number of mafias and number of villagers in the game
-    public static void printGameState() {
-        System.out.println("MAfia = " + MafiasGroup.NUMBER_OF_MAFIAS);
-        System.out.println("Vilager = " + VillagersGroup.NUMBER_OF_VILLAGERS);
-    }
-
 
     //todo: shayad behtar bashe ke in method , abstract beshe !
     public static void saveChangesAndReset() {
@@ -91,42 +86,54 @@ public class Main {
     public static Player[] findMaxVotedPlayers() {
         Player[] maxPlayers = new Player[findNumberOfMaxPlayers()];
 
-        System.err.println("--->  max vote is : " + findMaxVote());
+        System.err.println("max voted player(s) :");
 
-        System.err.println("max voted player(s) :  ");
         for (int i = 0, j = 0; i < numberOfPlayers; i++) {
             if (players[i].numberOfVotes == findMaxVote()) {
                 maxPlayers[j] = players[i];
                 j++;
-
                 System.err.print(players[i].name + "  ");
             }
         }
+
+        System.out.println();
         return maxPlayers;
     }
 
 
-    //   ***   MAIN PART   ***
+    //                *#*#*   MAIN PART   *#*#*
     public static void main(String[] args) throws InterruptedException {
         Scanner scanner = new Scanner(System.in);
+
+        // this part will print an explanation for the user how to use the code
+        System.out.println("WELCOME TO \"MAFIA GAME\"");
+        System.out.println("First please create a new game with the \"create_game\" command , after that you should inter players names...");
+        System.out.println("use this example : create_game player_1 player_2 player_3 ...");
 
         // this String will get the fist command of the game (starting command + players names)
         String[] beginningDate = scanner.nextLine().split(" ");
 
         // the fist command should be "create_game" : if was not : repeat!
-        while (!beginningDate[0].equals("create_game")) {
-            System.out.println("no game created");
-            System.err.println("first please create a new game with the \"create_game\" command");
-            System.err.println("try again...");
-            beginningDate = scanner.nextLine().split(" ");
+        // also this part will fix the number of players.  if the number of players was less than min , will print an alarm
+        while (!beginningDate[0].equals("create_game") || beginningDate.length < 4) {
+            if(!beginningDate[0].equals("create_game")){
+                System.out.println("no game created");
+                System.err.println("first please create a new game with the \"create_game\" command");
+                System.err.println("try again...");
+            } else {
+                System.err.println("Number of players is less than required");
+            }
+                beginningDate = scanner.nextLine().split(" ");
         }
 
+
+
         // print alarm massage !
-        System.err.println("game created successfully! please assign a role to each player");
+        System.out.println("game created successfully! please assign a role to each player");
 
         // set number of players and print it !
         numberOfPlayers = beginningDate.length - 1;
-        System.err.println("number of players : " + numberOfPlayers);
+        System.out.println("number of players : " + numberOfPlayers);
 
         // makes each player
         for (int i = 0; i < numberOfPlayers; i++) {
@@ -159,7 +166,7 @@ public class Main {
                 System.out.println("one or more player do not have a role");
             }
         }
-        System.err.println("you have created game and also assigned roles . now you should start the game...");
+        System.err.println("you have created game and also assigned roles . now you should start the game... use \"start_game\" command");
 
         // this is the String that gets the starting command
         String startCommand = scanner.nextLine();
@@ -171,12 +178,9 @@ public class Main {
         }
 
         // print all alive players in the game:
-        printPlayers();
+        printGameState();
         Thread.sleep(2000);
         System.out.println("Ready? Set! Go.");
-        for (int i = 0; i < 3; i++) {
-            System.out.println();
-        }
 
 
         //
@@ -192,12 +196,16 @@ public class Main {
 
         String input = "";
         //              *****    base body of the code    ***** :
-        while (MafiasGroup.NUMBER_OF_MAFIAS > VillagersGroup.NUMBER_OF_VILLAGERS
-                || MafiasGroup.NUMBER_OF_MAFIAS != 0 || !Joker.hangedInDay) {
+        while (MafiasGroup.NUMBER_OF_MAFIAS < VillagersGroup.NUMBER_OF_VILLAGERS
+                && MafiasGroup.NUMBER_OF_MAFIAS != 0 && !Joker.hangedInDay) {
 
 
             // ++++  Day part
+            for (int i = 0; i < 3; i++) {
+                System.out.println();
+            }
             System.out.println("Day " + Day.DAY_NUMBER++);
+
 
             while (!input.equals("end_vote")) {
                 input = scanner.nextLine();
@@ -210,14 +218,25 @@ public class Main {
                 else if (!input.startsWith("end_vote")){
                     String[] voteDate = input.split(" ");
                     Day.gettingVoteInTheDay(voteDate);
-
                 }
             }
             Day.hangInTheDay();
+            Day.saveChangesAndReset();
+
+
+            // middle condition!!
+            if(MafiasGroup.NUMBER_OF_MAFIAS < VillagersGroup.NUMBER_OF_VILLAGERS
+                    && MafiasGroup.NUMBER_OF_MAFIAS != 0 && !Joker.hangedInDay){
+                break;
+            }
 
 
             // ++++  Night part
+            for (int i = 0; i < 3; i++) {
+            System.out.println();
+            }
             System.out.println("Night " + Night.NIGHT_NUMBER++);
+
 
             while (!input.equals("end_night")) {
                 input = scanner.nextLine();
@@ -226,8 +245,8 @@ public class Main {
                 } else if (input.startsWith("start_game")) {
                     System.out.println("game has already started");
                 }
-                //
-                else {
+                //  voting for mafia and do night_players abilities!
+                else if(!input.startsWith("end_night")){
                     // todo
                 }
             }
@@ -247,7 +266,7 @@ public class Main {
 
 
         Thread.sleep(2000);
-        System.err.println("the game is over. GOODLUCK :))");
+        System.err.println("the game is over. GOODLUCK :)");
 
     }
 }

@@ -33,7 +33,6 @@ public class Player {
     public void isHanged() {
         isAlive = false;
 
-
         if (role instanceof MafiasGroup) {
             MafiasGroup.NUMBER_OF_MAFIAS--;
         } else if (role instanceof VillagersGroup) {
@@ -41,6 +40,8 @@ public class Player {
         } else if (role instanceof Joker){
             Joker.hangedInDay = true;
         }
+
+        System.out.println(this.name +" is dead");
     }
 
     // in the night
