@@ -8,16 +8,17 @@ public class Detective extends VillagersGroup {
     /**
      * this is the specific property of detective .
      * he can check a player .
-     * if player wasn't found , will print an alarm and returns false
-     * @param playerName this is the name of player we want to check.
-     * @return if the player is in MafiaGroup will return ture . else returns false.
+     * if the player is in MafiaGroup will print YES . else prints NO!
+     * @param player this is the player we want to check.
      */
-    public boolean inquiry(String playerName) {
-        if (Main.findPlayer(playerName) != null) {
-            return Main.findPlayer(playerName).role.isMafia;
+    public void inquiry(Player player) {
+        if (player != null) {
+            if(player.role.isMafia){
+                System.out.println("Yes. "+ player.name+ " is mafia");
+            } else {
+                System.out.println("NO."+ player.name+ " isn't mafia");
+            }
         }
-        // if player wasn't found :
-        return false;
     }
 
 

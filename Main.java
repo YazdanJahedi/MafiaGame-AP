@@ -152,10 +152,11 @@ public class Main {
                 if (findPlayer(assignDate[1]) != null) {
                     // if role wasn't found , prints an error
                     if (findRole(assignDate[2])) {
-                        findPlayer(assignDate[1]).setRole(assignDate[2]);
+                        if(findPlayer(assignDate[1]).setRole(assignDate[2])){
                         System.out.println("+");
                         assignments++;
                         System.out.println(assignments);
+                        }
 
                     } else {
                         System.out.println("role not found");
@@ -247,7 +248,7 @@ public class Main {
                 }
                 //  voting for mafia and do night_players abilities!
                 else if(!input.startsWith("end_night")){
-                    // todo
+                    Night.printNightPlayers();
                 }
             }
 

@@ -55,6 +55,7 @@ public class Day extends Main {
             }
         } else {
             System.err.println("input is incorrect. you should inter votes like this pattern: (voter_name) (votee_name)");
+            System.err.println("also you can end voting with \"end_vote\" command.");
         }
     }
 

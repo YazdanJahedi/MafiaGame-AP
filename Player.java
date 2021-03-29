@@ -15,18 +15,29 @@ public class Player {
         return name;
     }
 
-    public void setRole(String roleName) {
+    public boolean setRole(String roleName) {
         switch (roleName) {
             case "bulletproof" -> role = new Bulletproof();
             case "detective" -> role = new Detective();
             case "doctor" -> role = new Doctor();
             case "godfather" -> role = new Godfather();
-            case "Joker" -> role = new Joker();
+            case "Joker" -> {
+                if (!Joker.assignedJokerRole) {
+                    role = new Joker();
+                } else {
+                    System.err.println("Joker role has been assigned before");
+                    return false;
+                }
+            }
             case "mafia" -> role = new Mafia();
             case "silencer" -> role = new Silencer();
             case "villager" -> role = new Villager();
-            default -> System.out.println("role not found");
+            default -> {
+                System.out.println("role not found");
+                return false;
+            }
         }
+        return true;
     }
 
     // in the day
@@ -37,17 +48,17 @@ public class Player {
             MafiasGroup.NUMBER_OF_MAFIAS--;
         } else if (role instanceof VillagersGroup) {
             VillagersGroup.NUMBER_OF_VILLAGERS--;
-        } else if (role instanceof Joker){
+        } else if (role instanceof Joker) {
             Joker.hangedInDay = true;
         }
 
-        System.out.println(this.name +" is dead");
+        System.out.println(this.name + " is dead");
     }
 
     // in the night
     public void isKilled() {
-        if(this.role instanceof Bulletproof){
-            if(!((Bulletproof) this.role).isOneTimeHurt) {
+        if (this.role instanceof Bulletproof) {
+            if (!((Bulletproof) this.role).isOneTimeHurt) {
                 ((Bulletproof) this.role).isOneTimeHurt = true;
                 return;
             }
@@ -61,11 +72,11 @@ public class Player {
         }
     }
 
-    public void hasBeenVoted(){
+    public void hasBeenVoted() {
         numberOfVotes++;
     }
 
-    public void resetVote(){
+    public void resetVote() {
         this.hasVoted = false;
         numberOfVotes = 0;
     }
