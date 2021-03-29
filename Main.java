@@ -116,16 +116,15 @@ public class Main {
         // the fist command should be "create_game" : if was not : repeat!
         // also this part will fix the number of players.  if the number of players was less than min , will print an alarm
         while (!beginningDate[0].equals("create_game") || beginningDate.length < 4) {
-            if(!beginningDate[0].equals("create_game")){
+            if (!beginningDate[0].equals("create_game")) {
                 System.out.println("no game created");
                 System.err.println("first please create a new game with the \"create_game\" command");
                 System.err.println("try again...");
             } else {
                 System.err.println("Number of players is less than required");
             }
-                beginningDate = scanner.nextLine().split(" ");
+            beginningDate = scanner.nextLine().split(" ");
         }
-
 
 
         // print alarm massage !
@@ -152,10 +151,10 @@ public class Main {
                 if (findPlayer(assignDate[1]) != null) {
                     // if role wasn't found , prints an error
                     if (findRole(assignDate[2])) {
-                        if(findPlayer(assignDate[1]).setRole(assignDate[2])){
-                        System.out.println("+");
-                        assignments++;
-                        System.out.println(assignments);
+                        if (findPlayer(assignDate[1]).setRole(assignDate[2])) {
+                            System.out.println("+");
+                            assignments++;
+                            System.out.println(assignments);
                         }
 
                     } else {
@@ -216,7 +215,7 @@ public class Main {
                     System.out.println("game has already started");
                 }
                 // vetting vote part of the day :
-                else if (!input.startsWith("end_vote")){
+                else if (!input.startsWith("end_vote")) {
                     String[] voteDate = input.split(" ");
                     Day.gettingVoteInTheDay(voteDate);
                 }
@@ -226,15 +225,15 @@ public class Main {
 
 
             // middle condition!!
-            if(MafiasGroup.NUMBER_OF_MAFIAS >= VillagersGroup.NUMBER_OF_VILLAGERS
-                    || MafiasGroup.NUMBER_OF_MAFIAS == 0 || Joker.hangedInDay){
+            if (MafiasGroup.NUMBER_OF_MAFIAS >= VillagersGroup.NUMBER_OF_VILLAGERS
+                    || MafiasGroup.NUMBER_OF_MAFIAS == 0 || Joker.hangedInDay) {
                 break;
             }
 
 
             // ++++  Night part
             for (int i = 0; i < 3; i++) {
-            System.out.println();
+                System.out.println();
             }
             System.out.println("Night " + Night.NIGHT_NUMBER++);
 
@@ -247,21 +246,77 @@ public class Main {
                     System.out.println("game has already started");
                 }
                 //  voting for mafia and do night_players abilities!
-                else if(!input.startsWith("end_night")){
+                else if (!input.startsWith("end_night")) {
                     Night.printNightPlayers();
+                    String[] voteDate = input.split(" ");
+
+                    if (findPlayer(voteDate[0]) != null) {
+                        Player firstPlayer = findPlayer(voteDate[0]);
+
+                        if (firstPlayer.isAlive) {
+                            if (Night.isNightPlayer(voteDate[0])) {
+
+                                // if the first name was in MafiaGroup:
+                                if (firstPlayer.role instanceof MafiasGroup) {
+                                    // if was silencer (has a special ability in the night)
+                                    if (firstPlayer.role instanceof Silencer &&
+                                            firstPlayer.hasVoted) {
+
+
+                                        // todo : special ability ...
+
+                                    }
+                                    // if was non-special ability mafia in the night (mafia & godfather & non-voted silencer!!)
+                                    else {
+
+
+                                        // todo vote of mafias
+                                    }
+
+                                }
+
+                                // if the first name was in VillagerGroup:
+                                else if (firstPlayer.role instanceof VillagersGroup) {
+                                    if (firstPlayer.role instanceof Doctor) {
+
+
+                                        // todo ...
+                                    } else if (firstPlayer.role instanceof Detective) {
+
+
+                                        // todo
+                                    }
+                                }
+                            } else {
+                                System.err.println("user can not wake up during night");
+                            }
+                        } else {
+                            System.out.println("user is dead");
+                        }
+                    }
                 }
             }
 
         }
 
 
+        //
+
+
+        //
+
+
+        //
+
+        //
+
 
         // winning alarm and ending part of the game :
-        if(Joker.hangedInDay){
+        if (Joker.hangedInDay) {
             System.out.println("Joker won!");
-        } else if (MafiasGroup.NUMBER_OF_MAFIAS == 0){
+        } else if (MafiasGroup.NUMBER_OF_MAFIAS == 0) {
             System.out.println("Villagers won!");
-        }else {
+        } else {
             System.out.println("Mafia won!");
         }
 
