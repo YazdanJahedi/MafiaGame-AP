@@ -2,7 +2,8 @@ public class Player {
     String name;
     Roles role;
     boolean isAlive = true;
-    boolean isTicked = false;
+    boolean isChosenByMafia = false;
+    boolean isChosenByDoctor = false;
     boolean isSilenced = false;
     boolean hasVoted = false;
     int numberOfVotes = 0;

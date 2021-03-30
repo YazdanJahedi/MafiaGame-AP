@@ -15,8 +15,8 @@ public class Doctor extends VillagersGroup {
         if (player != null) {
             if (!player.isAlive) {
                 System.out.println("user is dead");
-            } else if (player.isAlive && player.isTicked) {
-                player.isTicked = false;
+            } else if (player.isAlive && player.isChosenByMafia) {
+                player.isChosenByMafia = false;
             }
         }
     }

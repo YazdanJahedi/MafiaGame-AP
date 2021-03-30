@@ -23,29 +23,22 @@ public class Night extends Main {
 
     public static void gettingVoteInTheNight(String[] voteData) {
         if (voteData.length == 2) {
-            if (findPlayer(voteData[0]) != null && findPlayer(voteData[1]) != null) {
+            if (findPlayer(voteData[1]) != null) {
                 Player mafia = findPlayer(voteData[0]);
                 Player target = findPlayer(voteData[1]);
 
                 // mafia part
-                if (mafia.isAlive) {
-                    if (isNightPlayer(voteData[0])) {
-                            mafia.hasVoted = true;
-                    } else {
-                        System.err.println("user can not wake up during night");
-                    }
+                mafia.hasVoted = true;
 
-
-                    // target part
-                    if (target.isAlive) {
-                        target.hasBeenVoted();
-                    } else {
-                        System.err.println("target already dead");
-                        target.hasVoted = false;
-                    }
+                // target part
+                if (target.isAlive) {
+                    target.hasBeenVoted();
+                    System.out.println(mafia.name + " (" + mafia.role + ") voted to " + target.name + " (" + target.role + ")");
                 } else {
-                    System.err.println("user is dead");
+                    System.err.println("target already dead");
+                    mafia.hasVoted = false;
                 }
+
             }
         } else {
             System.err.println("input is incorrect. you should inter votes like this pattern: (mafia_name) (target_name)");

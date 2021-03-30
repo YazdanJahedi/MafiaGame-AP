@@ -51,7 +51,7 @@ public class Main {
     public static void saveChangesAndReset() {
         for (int i = 0; i < numberOfPlayers; i++) {
             players[i].isSilenced = false;
-            players[i].isTicked = false;
+            players[i].isChosenByMafia = false;
             players[i].resetVote();
 
 //            if (!players[i].isAlive) {
@@ -236,7 +236,8 @@ public class Main {
                 System.out.println();
             }
             System.out.println("Night " + Night.NIGHT_NUMBER++);
-
+            Thread.sleep(2000);
+            Night.printNightPlayers();
 
             while (!input.equals("end_night")) {
                 input = scanner.nextLine();
@@ -247,8 +248,8 @@ public class Main {
                 }
                 //  voting for mafia and do night_players abilities!
                 else if (!input.startsWith("end_night")) {
-                    Night.printNightPlayers();
                     String[] voteDate = input.split(" ");
+
 
                     if (findPlayer(voteDate[0]) != null) {
                         Player firstPlayer = findPlayer(voteDate[0]);
@@ -258,33 +259,42 @@ public class Main {
 
                                 // if the first name was in MafiaGroup:
                                 if (firstPlayer.role instanceof MafiasGroup) {
+
                                     // if was silencer (has a special ability in the night)
                                     if (firstPlayer.role instanceof Silencer &&
                                             firstPlayer.hasVoted) {
+                                        if(!((Silencer) firstPlayer.role).hasSilenced){
 
+                                        ((Silencer) firstPlayer.role).silence(voteDate[1]);
 
-                                        // todo : special ability ...
+                                        } else {
+                                            System.err.println("silencer has silenced a player before");
+                                        }
+
 
                                     }
+
                                     // if was non-special ability mafia in the night (mafia & godfather & non-voted silencer!!)
                                     else {
 
+                                        Night.gettingVoteInTheNight(voteDate);
 
-                                        // todo vote of mafias
+                                        // todo : chand bar ray bede ........
                                     }
 
                                 }
 
                                 // if the first name was in VillagerGroup:
                                 else if (firstPlayer.role instanceof VillagersGroup) {
+                                    System.out.println("villager : + ");
                                     if (firstPlayer.role instanceof Doctor) {
 
 
                                         // todo ...
                                     } else if (firstPlayer.role instanceof Detective) {
 
-
-                                        // todo
+                                        ((Detective) firstPlayer.role).inquiry(findPlayer(voteDate[1]));
+                                        // todo : just 1 time ...
                                     }
                                 }
                             } else {
