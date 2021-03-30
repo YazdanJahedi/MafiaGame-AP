@@ -323,6 +323,9 @@ public class Main {
         //
 
 
+        for (int i = 0; i < 4; i++) {
+            System.out.println("*");
+        }
         // winning alarm and ending part of the game :
         if (Joker.hangedInDay) {
             System.out.println("Joker won!");
