@@ -34,20 +34,20 @@ public class Day extends Main {
                     if (!voter.hasVoted) {
                         if (!voter.isSilenced) {
                             voter.hasVoted = true;
+
+                            // votee part
+                             if (votee.isAlive) {
+                                    votee.hasBeenVoted();
+                                printPlayersHasNotVoted();
+                             } else {
+                               System.err.println("votee already dead");
+                               voter.hasVoted = false;
+                             }
                         } else {
                             System.err.println("voter is silenced");
                         }
                     } else {
                         System.err.println("voter has voted before .player can't vote two times");
-                    }
-
-                    // votee part
-                    if (votee.isAlive) {
-                        votee.hasBeenVoted();
-                        printPlayersHasNotVoted();
-                    } else {
-                        System.err.println("votee already dead");
-                        voter.hasVoted = false;
                     }
                 } else {
                     System.err.println("voter is dead");

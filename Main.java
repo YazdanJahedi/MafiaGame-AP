@@ -32,26 +32,25 @@ public class Main {
     // this method will print all the players that are in the game (also they're alive)
     // also this method will print number of mafias and number of villagers in the game
     public static void printGameState() throws InterruptedException {
-        System.err.println("_____________________________");
+        System.out.println("_____________________________");
         System.out.println("number of mafias: " + MafiasGroup.NUMBER_OF_MAFIAS);
         System.out.println("number of villagers: " + VillagersGroup.NUMBER_OF_VILLAGERS);
         System.out.println("is there any Joker: " + Joker.assignedJokerRole);
         System.out.println();
-        Thread.sleep(500);
-        System.err.println("** Alive players in the game:");
+        System.out.println("** Alive players in the game:");
         for (int i = 0; i < numberOfPlayers; i++) {
             if (players[i].isAlive) {
                 System.out.println(players[i].getName() + ": " + players[i].role);
             }
         }
-        System.err.println("------------------------------");
+        System.out.println("-----------------------------");
     }
 
     //todo: shayad behtar bashe ke in method , abstract beshe !
     public static void saveChangesAndReset() {
         for (int i = 0; i < numberOfPlayers; i++) {
             players[i].isSilenced = false;
-            players[i].isChosenByMafia = false;
+            //players[i].isChosenByMafia = false;
             players[i].resetVote();
 
 //            if (!players[i].isAlive) {
@@ -224,11 +223,16 @@ public class Main {
             Day.saveChangesAndReset();
 
 
+            //
+
+
             // middle condition!!
             if (MafiasGroup.NUMBER_OF_MAFIAS >= VillagersGroup.NUMBER_OF_VILLAGERS
                     || MafiasGroup.NUMBER_OF_MAFIAS == 0 || Joker.hangedInDay) {
                 break;
             }
+
+            //
 
 
             // ++++  Night part
@@ -261,16 +265,10 @@ public class Main {
                                 if (firstPlayer.role instanceof MafiasGroup) {
 
                                     // if was silencer (has a special ability in the night)
-                                    if (firstPlayer.role instanceof Silencer &&
-                                            firstPlayer.hasVoted) {
-                                        if(!((Silencer) firstPlayer.role).hasSilenced){
+                                    if (firstPlayer.role instanceof Silencer
+                                            && !((Silencer) firstPlayer.role).hasSilenced) {
 
                                         ((Silencer) firstPlayer.role).silence(voteDate[1]);
-
-                                        } else {
-                                            System.err.println("silencer has silenced a player before");
-                                        }
-
 
                                     }
 
@@ -286,15 +284,17 @@ public class Main {
 
                                 // if the first name was in VillagerGroup:
                                 else if (firstPlayer.role instanceof VillagersGroup) {
-                                    System.out.println("villager : + ");
+
                                     if (firstPlayer.role instanceof Doctor) {
 
+                                        ((Doctor) firstPlayer.role).cure(findPlayer(voteDate[1]));
 
-                                        // todo ...
                                     } else if (firstPlayer.role instanceof Detective) {
-
-                                        ((Detective) firstPlayer.role).inquiry(findPlayer(voteDate[1]));
-                                        // todo : just 1 time ...
+                                        if (!((Detective) firstPlayer.role).hasAsked) {
+                                            ((Detective) firstPlayer.role).inquiry(findPlayer(voteDate[1]));
+                                        } else {
+                                            System.err.println("detective has already asked");
+                                        }
                                     }
                                 }
                             } else {
@@ -306,6 +306,8 @@ public class Main {
                     }
                 }
             }
+            Night.killInTheNight();
+            Night.saveChangesAndReset();
 
         }
 

@@ -1,4 +1,5 @@
 public class Doctor extends VillagersGroup {
+    boolean hasCured = false;
 
     public Doctor() {
         NUMBER_OF_VILLAGERS++;
@@ -13,10 +14,16 @@ public class Doctor extends VillagersGroup {
      */
     public void cure(Player player) {
         if (player != null) {
-            if (!player.isAlive) {
-                System.out.println("user is dead");
-            } else if (player.isAlive && player.isChosenByMafia) {
-                player.isChosenByMafia = false;
+            if (!hasCured) {
+                if (player.isAlive) {
+                    player.isChosenByDoctor = true;
+                    hasCured = true;
+                    System.out.println("Doctor chose \"" + player.name + "\" to cure!");
+                } else {
+                    System.out.println("user already is dead");
+                }
+            } else {
+                System.err.println("doctor has chosen a player before!!");
             }
         }
     }

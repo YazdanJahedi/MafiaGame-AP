@@ -1,4 +1,5 @@
 public class Detective extends VillagersGroup {
+    boolean hasAsked = false;
 
     public Detective() {
         NUMBER_OF_VILLAGERS++;
@@ -16,8 +17,9 @@ public class Detective extends VillagersGroup {
             if(player.role.isMafia){
                 System.out.println("Yes. "+ player.name+ " is mafia");
             } else {
-                System.out.println("NO."+ player.name+ " isn't mafia");
+                System.out.println("NO. "+ player.name+ " isn't mafia");
             }
+            hasAsked = true;
         }
     }
 

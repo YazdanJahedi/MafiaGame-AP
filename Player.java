@@ -2,7 +2,6 @@ public class Player {
     String name;
     Roles role;
     boolean isAlive = true;
-    boolean isChosenByMafia = false;
     boolean isChosenByDoctor = false;
     boolean isSilenced = false;
     boolean hasVoted = false;
@@ -61,10 +60,17 @@ public class Player {
         if (this.role instanceof Bulletproof) {
             if (!((Bulletproof) this.role).isOneTimeHurt) {
                 ((Bulletproof) this.role).isOneTimeHurt = true;
+                System.out.println(this.name + " was bulletproof and lost the extra-lives");
                 return;
             }
         }
+
+        if(this.role instanceof Joker){
+            Joker.assignedJokerRole = false;
+        }
+
         isAlive = false;
+        System.out.println(this.name + " was killed");
 
         if (role instanceof MafiasGroup) {
             MafiasGroup.NUMBER_OF_MAFIAS--;
