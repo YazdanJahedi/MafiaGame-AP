@@ -73,7 +73,7 @@ public class Night extends Main {
                     } else if (firstPlayer.role instanceof Doctor) {
                         ((Doctor) firstPlayer.role).cure(findPlayer(voteDate[1]));
                     } else if (firstPlayer.role instanceof Detective) {
-                            ((Detective) firstPlayer.role).inquiry(findPlayer(voteDate[1]));
+                        ((Detective) firstPlayer.role).inquiry(findPlayer(voteDate[1]));
                     }
 
                 } else {
