@@ -140,7 +140,7 @@ public class Main {
         System.out.println("** player(s) that don't have role: ");
 
         for (int i = 0; i < NUMBER_OF_PLAYERS; i++) {
-            if(!players[i].isAssigned){
+            if (!players[i].isAssigned) {
                 System.out.print(players[i].getName() + " ");
             }
         }
@@ -231,7 +231,7 @@ public class Main {
                             assignments++;
                             player.isAssigned = true;
 
-                            if(assignments < NUMBER_OF_PLAYERS)
+                            if (assignments < NUMBER_OF_PLAYERS)
                                 printPlayersNotAssigned();
                         }
                     } else {
@@ -250,6 +250,32 @@ public class Main {
 
     }
 
+    /**
+     * after creating the game and assigning the roles , user should start the game.w
+     * this method will do this :)
+     */
+    public static void start_game() throws InterruptedException {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("you have created game and also assigned roles . now you should start the game...");
+
+        // this is the String that gets the starting command
+        String startCommand;
+
+        // the fist command should be "create_game" : if was not ==> repeat!
+        do {
+            System.err.println("please use \"start_game\" command");
+            startCommand = scanner.nextLine();
+        }
+        while (!startCommand.equals("start_game"));
+
+
+        // print all alive players in the game:
+        printGameState();
+        Thread.sleep(2000);
+        System.out.println("Ready? Set! Go.");
+
+    }
 
     //  ---------------    -*#*#$   MAIN PART   $#*#*-    -------------- //
 
@@ -262,22 +288,7 @@ public class Main {
 
         assign_role();
 
-        System.err.println("you have created game and also assigned roles . now you should start the game... use \"start_game\" command");
-
-        // this is the String that gets the starting command
-        String startCommand = scanner.nextLine();
-
-        // the fist command should be "create_game" : if was not : repeat!
-        while (!startCommand.equals("start_game")) {
-            System.err.println("please use \"start_game\" command");
-            startCommand = scanner.nextLine();
-        }
-
-        // print all alive players in the game:
-        printGameState();
-        Thread.sleep(2000);
-        System.out.println("Ready? Set! Go.");
-
+        start_game();
 
         //
 
@@ -423,7 +434,7 @@ public class Main {
         for (int i = 0; i < 4; i++) {
             System.out.println("*");
         }
-        // winning alarm and ending part of the game :
+        // winning massage and ending part of the game :
         if (Joker.hangedInDay) {
             System.out.println("Joker won!");
         } else if (MafiasGroup.NUMBER_OF_MAFIAS == 0) {
@@ -431,10 +442,8 @@ public class Main {
         } else {
             System.out.println("Mafia won!");
         }
-
-
-        Thread.sleep(2000);
-        System.err.println("the game is over. GOODLUCK :)");
+        System.out.println();
+        System.out.println("the game is over. GOOD LUCK :)");
 
     }
 }
