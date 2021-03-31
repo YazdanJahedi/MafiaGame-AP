@@ -132,15 +132,25 @@ public class Main {
         return maxPlayers;
     }
 
+    /**
+     * this method will print Welcoming massage and also
+     * will print an explanation for the user , guide him how to use the code
+     */
+    public static void printBeginningMassage() {
+        System.out.println("WELCOME TO \"MAFIA GAME\"");
+        System.out.println("This game is created to help GOD of the game to manage the game better and simpler");
+        System.out.println("  *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *");
+        System.out.println("First please create a new game with the \"create_game\" command , after that you should inter players names...");
+        System.out.println("use this example : create_game player_1 player_2 player_3 ...");
+    }
 
-    //  ---------------    -*#*#*   MAIN PART   *#*#*-    -------------- //
+
+    //  ---------------    -*#*#$   MAIN PART   $#*#*-    -------------- //
+
     public static void main(String[] args) throws InterruptedException {
         Scanner scanner = new Scanner(System.in);
 
-        // this part will print an explanation for the user how to use the code
-        System.out.println("WELCOME TO \"MAFIA GAME\"");
-        System.out.println("First please create a new game with the \"create_game\" command , after that you should inter players names...");
-        System.out.println("use this example : create_game player_1 player_2 player_3 ...");
+        printBeginningMassage();
 
         // this String will get the fist command of the game (starting command + players names)
         String[] beginningDate = scanner.nextLine().split(" ");
