@@ -277,6 +277,32 @@ public class Main {
 
     }
 
+    /**
+     * this method in the end the game , will print the winner :)
+     */
+    public static void endGameMassage() throws InterruptedException {
+
+        for (int i = 0; i < 3; i++) {
+            System.out.println("*");
+        }
+        System.out.println("the game is over:");
+        for (int i = 0; i < 3; i++) {
+            Thread.sleep(1000);
+            System.out.println("*");
+        }
+        // winning massage and ending part of the game :
+        if (Joker.hangedInDay) {
+            System.out.println("Joker won!");
+        } else if (MafiasGroup.NUMBER_OF_MAFIAS == 0) {
+            System.out.println("Villagers won!");
+        } else {
+            System.out.println("Mafia won!");
+        }
+        System.out.println();
+        System.out.println("GOOD LUCK :)");
+    }
+
+
     //  ---------------    -*#*#$   MAIN PART   $#*#*-    -------------- //
 
     public static void main(String[] args) throws InterruptedException {
@@ -366,6 +392,7 @@ public class Main {
                     if (findPlayer(voteDate[0]) != null) {
                         Player firstPlayer = findPlayer(voteDate[0]);
 
+
                         if (firstPlayer.isAlive) {
                             if (Night.isNightPlayer(voteDate[0])) {
 
@@ -423,27 +450,7 @@ public class Main {
         //
 
 
-        //
-
-
-        //
-
-        //
-
-
-        for (int i = 0; i < 4; i++) {
-            System.out.println("*");
-        }
-        // winning massage and ending part of the game :
-        if (Joker.hangedInDay) {
-            System.out.println("Joker won!");
-        } else if (MafiasGroup.NUMBER_OF_MAFIAS == 0) {
-            System.out.println("Villagers won!");
-        } else {
-            System.out.println("Mafia won!");
-        }
-        System.out.println();
-        System.out.println("the game is over. GOOD LUCK :)");
+        endGameMassage();
 
     }
 }
