@@ -1,13 +1,15 @@
+import java.util.Scanner;
+
 public class Day extends Main {
-    static int DAY_NUMBER = 1;
+    protected static int DAY_NUMBER = 1;
 
 
     public static void printPlayersHasNotVoted() {
         int numberOfPlayersHasNotVoted = 0;
-        String[] names = new String[numberOfPlayers];
-        for (int i = 0; i < numberOfPlayers; i++) {
+        String[] names = new String[NUMBER_OF_PLAYERS];
+        for (int i = 0; i < NUMBER_OF_PLAYERS; i++) {
             if (!players[i].hasVoted && players[i].isAlive && !players[i].isSilenced) {
-                names[numberOfPlayersHasNotVoted++] = players[i].name;
+                names[numberOfPlayersHasNotVoted++] = players[i].getName();
             }
         }
 
@@ -36,13 +38,13 @@ public class Day extends Main {
                             voter.hasVoted = true;
 
                             // votee part
-                             if (votee.isAlive) {
-                                    votee.hasBeenVoted();
+                            if (votee.isAlive) {
+                                votee.hasBeenVoted();
                                 printPlayersHasNotVoted();
-                             } else {
-                               System.err.println("votee already dead");
-                               voter.hasVoted = false;
-                             }
+                            } else {
+                                System.err.println("votee already dead");
+                                voter.hasVoted = false;
+                            }
                         } else {
                             System.err.println("voter is silenced");
                         }
@@ -59,20 +61,41 @@ public class Day extends Main {
         }
     }
 
+    public static void DayTimeVote() {
+        Scanner scanner = new Scanner(System.in);
+        String input = "";
+
+        while (!input.equals("end_vote")) {
+            input = scanner.nextLine();
+            if (input.equals("get_game_state")) {
+                printGameState();
+            } else if (input.startsWith("start_game")) {
+                System.out.println("game has already started");
+            }
+            // vetting vote part of the day :
+            else if(!input.equals("end_vote")){
+                String[] voteDate = input.split(" ");
+                Day.gettingVoteInTheDay(voteDate);
+            }
+        }
+
+    }
+
     public static void hangInTheDay() {
         Player[] maxPlayers = findMaxVotedPlayers();
         if (maxPlayers.length == 1) {
             maxPlayers[0].isHanged();
         } else {
-            System.err.println("villagers couldn't decide who would be hanged in the day...");
+            System.out.println("villagers couldn't decide who would be hanged in the day...");
             System.out.println("nobody died");
         }
     }
 
     public static void saveChangesAndReset() {
-        for (int i = 0; i < numberOfPlayers; i++) {
+        for (int i = 0; i < NUMBER_OF_PLAYERS; i++) {
             players[i].isSilenced = false;
             players[i].resetVote();
         }
     }
+
 }

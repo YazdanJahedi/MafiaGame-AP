@@ -1,3 +1,4 @@
+import javax.swing.plaf.TableHeaderUI;
 import java.util.Scanner;
 
 public class Main {
@@ -124,9 +125,9 @@ public class Main {
                 j++;
                 System.out.print(players[i].getName() + "  ");
             }
-            System.out.println();
-            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         }
+        System.out.println();
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
         System.out.println();
         return maxPlayers;
@@ -272,9 +273,13 @@ public class Main {
 
         // print all alive players in the game:
         printGameState();
-        Thread.sleep(2000);
-        System.out.println("Ready? Set! Go.");
 
+        System.out.print("Ready? ");
+        Thread.sleep(800);
+        System.out.print("Set! ");
+        Thread.sleep(500);
+        System.out.print("GO ...");
+        System.out.println();
     }
 
     /**
@@ -316,65 +321,45 @@ public class Main {
 
         start_game();
 
-        //
-
-
-        //
-
-
-        //
-
-        //
-
 
         String input = "";
-        //              *****    base body of the code    ***** :
+        //              *****    base body of the code    *****
         while (MafiasGroup.NUMBER_OF_MAFIAS < VillagersGroup.NUMBER_OF_VILLAGERS
                 && MafiasGroup.NUMBER_OF_MAFIAS != 0 && !Joker.hangedInDay) {
 
 
-            // ++++  Day part
+            //  &&&&&&&&&&&&  Day part  &&&&&&&&&&&&
+
+            // print day number
             for (int i = 0; i < 3; i++) {
                 System.out.println();
             }
             System.out.println("Day " + Day.DAY_NUMBER++);
             System.out.println();
 
-            while (!input.equals("end_vote")) {
-                input = scanner.nextLine();
-                if (input.equals("get_game_state")) {
-                    printGameState();
-                } else if (input.startsWith("start_game")) {
-                    System.out.println("game has already started");
-                }
-                // vetting vote part of the day :
-                else if (!input.startsWith("end_vote")) {
-                    String[] voteDate = input.split(" ");
-                    Day.gettingVoteInTheDay(voteDate);
-                }
-            }
+            //////////
+            Day.DayTimeVote();
             Day.hangInTheDay();
             Day.saveChangesAndReset();
+            //////////
 
 
-            //
-
-
-            // middle condition!!
+            //    ---- middle condition -----
             if (MafiasGroup.NUMBER_OF_MAFIAS >= VillagersGroup.NUMBER_OF_VILLAGERS
                     || MafiasGroup.NUMBER_OF_MAFIAS == 0 || Joker.hangedInDay) {
                 break;
             }
 
-            //
 
+            // &&&&&&&&&&&&  Night part  &&&&&&&&&&&&
 
-            // ++++  Night part
+            // print Night number
             for (int i = 0; i < 3; i++) {
                 System.out.println();
             }
             System.out.println("Night " + Night.NIGHT_NUMBER++);
-            Thread.sleep(1000);
+
+            // print NightPlayers
             Night.printNightPlayers();
 
             while (!input.equals("end_night")) {
