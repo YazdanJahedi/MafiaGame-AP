@@ -1,4 +1,6 @@
-import javax.swing.plaf.TableHeaderUI;
+//  the repository URL address for this project:
+//  https://github.com/YazdanJahedi/MafiaGame-AP
+
 import java.util.Scanner;
 
 public class Main {
@@ -119,12 +121,16 @@ public class Main {
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         System.out.println("player(s) with maximum number of votes:");
 
-        for (int i = 0, j = 0; i < NUMBER_OF_PLAYERS; i++) {
-            if (players[i].numberOfVotes == findMaxVote()) {
-                maxPlayers[j] = players[i];
-                j++;
-                System.out.print(players[i].getName() + "  ");
+        if (findMaxVote() != 0) {
+            for (int i = 0, j = 0; i < NUMBER_OF_PLAYERS; i++) {
+                if (players[i].numberOfVotes == findMaxVote()) {
+                    maxPlayers[j] = players[i];
+                    j++;
+                    System.out.print(players[i].getName() + "  ");
+                }
             }
+        } else {
+            System.out.print("NOBODY !!");
         }
         System.out.println();
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
@@ -311,7 +317,6 @@ public class Main {
     //  ---------------    -*#*#$   MAIN PART   $#*#*-    -------------- //
 
     public static void main(String[] args) throws InterruptedException {
-        Scanner scanner = new Scanner(System.in);
 
         printBeginningMassage();
 
@@ -321,15 +326,12 @@ public class Main {
 
         start_game();
 
-
-        String input = "";
         //              *****    base body of the code    *****
         while (MafiasGroup.NUMBER_OF_MAFIAS < VillagersGroup.NUMBER_OF_VILLAGERS
                 && MafiasGroup.NUMBER_OF_MAFIAS != 0 && !Joker.hangedInDay) {
 
 
             //  &&&&&&&&&&&&  Day part  &&&&&&&&&&&&
-
             // print day number
             for (int i = 0; i < 3; i++) {
                 System.out.println();
@@ -337,11 +339,14 @@ public class Main {
             System.out.println("Day " + Day.DAY_NUMBER++);
             System.out.println();
 
-            //////////
+            if (Night.NIGHT_NUMBER > 1) {
+                Night.killInTheNight();
+                Night.saveChangesAndReset();
+            }
+
             Day.DayTimeVote();
             Day.hangInTheDay();
             Day.saveChangesAndReset();
-            //////////
 
 
             //    ---- middle condition -----
@@ -352,7 +357,6 @@ public class Main {
 
 
             // &&&&&&&&&&&&  Night part  &&&&&&&&&&&&
-
             // print Night number
             for (int i = 0; i < 3; i++) {
                 System.out.println();
@@ -362,80 +366,10 @@ public class Main {
             // print NightPlayers
             Night.printNightPlayers();
 
-            while (!input.equals("end_night")) {
-                input = scanner.nextLine();
-                if (input.equals("get_game_state")) {
-                    printGameState();
-                } else if (input.startsWith("start_game")) {
-                    System.out.println("game has already started");
-                }
-                //  voting for mafia and do night_players abilities!
-                else if (!input.startsWith("end_night")) {
-                    String[] voteDate = input.split(" ");
-
-
-                    if (findPlayer(voteDate[0]) != null) {
-                        Player firstPlayer = findPlayer(voteDate[0]);
-
-
-                        if (firstPlayer.isAlive) {
-                            if (Night.isNightPlayer(voteDate[0])) {
-
-                                // if the first name was in MafiaGroup:
-                                if (firstPlayer.role instanceof MafiasGroup) {
-
-                                    // if was silencer (has a special ability in the night)
-                                    if (firstPlayer.role instanceof Silencer
-                                            && !((Silencer) firstPlayer.role).hasSilenced) {
-
-                                        ((Silencer) firstPlayer.role).silence(voteDate[1]);
-
-                                    }
-
-                                    // if was non-special ability mafia in the night (mafia & godfather & non-voted silencer!!)
-                                    else {
-
-                                        Night.gettingVoteInTheNight(voteDate);
-
-                                        // todo : chand bar ray bede ........
-                                    }
-
-                                }
-
-                                // if the first name was in VillagerGroup:
-                                else if (firstPlayer.role instanceof VillagersGroup) {
-
-                                    if (firstPlayer.role instanceof Doctor) {
-
-                                        ((Doctor) firstPlayer.role).cure(findPlayer(voteDate[1]));
-
-                                    } else if (firstPlayer.role instanceof Detective) {
-                                        if (!((Detective) firstPlayer.role).hasAsked) {
-                                            ((Detective) firstPlayer.role).inquiry(findPlayer(voteDate[1]));
-                                        } else {
-                                            System.err.println("detective has already asked");
-                                        }
-                                    }
-                                }
-                            } else {
-                                System.err.println("user can not wake up during night");
-                            }
-                        } else {
-                            System.out.println("user is dead");
-                        }
-                    }
-                }
-            }
-            Night.killInTheNight();
-            Night.saveChangesAndReset();
-
+            Night.NightTime();
         }
 
-
-        //
-
-
         endGameMassage();
-
     }
+
 }
