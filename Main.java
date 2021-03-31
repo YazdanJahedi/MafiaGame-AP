@@ -1,26 +1,44 @@
 import java.util.Scanner;
 
 public class Main {
-    // static properties used in the main part
-    static final Player[] players = new Player[100];
-    static int numberOfPlayers = 0;  // max number of the players : 100
 
-    static final String[] rolesName = {"mafia", "doctor", "villager", "Joker", "godfather", "bulletproof", "detective", "silencer"};
-    static final int NUMBER_OF_ROLES = 8;
+    // -------------------   static properties   ------------------- //
+
+    protected static final Player[] players = new Player[100];
+    protected static int NUMBER_OF_PLAYERS = 0;   // max number of the players : 100
+
+    private static final String[] rolesName = {"mafia", "doctor", "villager", "Joker", "godfather", "bulletproof", "detective", "silencer"};
+    private static final int NUMBER_OF_ROLES = 8;
 
 
+    // ---------------------   static methods   --------------------- //
+
+    /**
+     * @param name this is the name of the player we want to find.
+     * @return this method will find a player with this name .
+     * if the name wan not found , method will return null and prints an alarm.
+     * <p>
+     * <p>
+     * # this method is one the most used methods in this project.
+     */
     public static Player findPlayer(String name) {
-        for (int i = 0; i < numberOfPlayers; i++) {
+        for (int i = 0; i < NUMBER_OF_PLAYERS; i++) {
             if (players[i].getName().equals(name)) {
                 return players[i];
             }
         }
-        System.out.println("user not found");
+        System.err.println("user not found");
         return null;
     }
 
+    /**
+     * this method is used in the "assign_role" part of the project.
+     *
+     * @param name this is name of the role we want to find
+     * @return we pass a role's name , if the role exists in the game , will return true .
+     * else returns false .
+     */
     public static boolean findRole(String name) {
-        // 8 is number of roles
         for (int i = 0; i < NUMBER_OF_ROLES; i++) {
             if (name.equals(rolesName[i])) {
                 return true;
@@ -29,41 +47,37 @@ public class Main {
         return false;
     }
 
-    // this method will print all the players that are in the game (also they're alive)
-    // also this method will print number of mafias and number of villagers in the game
-    public static void printGameState() throws InterruptedException {
-        System.out.println("_____________________________");
+    /**
+     * this method will print all the players that are in the game (and also they're alive)
+     * also this method will print number of mafias and number of villagers in the game
+     */
+    public static void printGameState() {
+        System.out.println();
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         System.out.println("number of mafias: " + MafiasGroup.NUMBER_OF_MAFIAS);
         System.out.println("number of villagers: " + VillagersGroup.NUMBER_OF_VILLAGERS);
         System.out.println("is there any Joker: " + Joker.assignedJokerRole);
         System.out.println();
         System.out.println("** Alive players in the game:");
-        for (int i = 0; i < numberOfPlayers; i++) {
+        for (int i = 0; i < NUMBER_OF_PLAYERS; i++) {
             if (players[i].isAlive) {
                 System.out.println(players[i].getName() + ": " + players[i].role);
             }
         }
-        System.out.println("-----------------------------");
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        System.out.println();
     }
 
-    //todo: shayad behtar bashe ke in method , abstract beshe !
-    public static void saveChangesAndReset() {
-        for (int i = 0; i < numberOfPlayers; i++) {
-            players[i].isSilenced = false;
-            //players[i].isChosenByMafia = false;
-            players[i].resetVote();
-
-//            if (!players[i].isAlive) {
-//                // todo : fekr konam shart khoob nsit
-//                players[i].isKilled();
-//            }
-
-        }
-    }
-
+    /**
+     * this method will check all players and finds the maximum number of given votes to a player.
+     * <p>
+     * this method won't be used directly , it will be used in other methods!
+     *
+     * @return the max number of vote between the players
+     */
     public static int findMaxVote() {
         int max = 0;
-        for (int i = 0; i < numberOfPlayers; i++) {
+        for (int i = 0; i < NUMBER_OF_PLAYERS; i++) {
             if (players[i].numberOfVotes > max) {
                 max = players[i].numberOfVotes;
             }
@@ -72,9 +86,17 @@ public class Main {
         return max;
     }
 
+    /**
+     * in the game it's necessary to know , how many players have the max vote.
+     * this method will answer to this question !
+     * <p>
+     * this method won't be used directly , it will be used in other methods!
+     *
+     * @return number of the player that have the maximum number of votes
+     */
     public static int findNumberOfMaxPlayers() {
         int numberOfMaxPlayer = 0;
-        for (int i = 0; i < numberOfPlayers; i++) {
+        for (int i = 0; i < NUMBER_OF_PLAYERS; i++) {
             if (players[i].numberOfVotes == findMaxVote()) {
                 numberOfMaxPlayer++;
             }
@@ -82,17 +104,28 @@ public class Main {
         return numberOfMaxPlayer;
     }
 
+    /**
+     * with this method we will find out witch players have the maximum number of votes.
+     * <p>
+     * this method also prints the name of maxPlayers :))
+     *
+     * @return array of the players that have been voted more than other players .
+     * (players with "max number of vote")
+     */
     public static Player[] findMaxVotedPlayers() {
         Player[] maxPlayers = new Player[findNumberOfMaxPlayers()];
 
-        System.err.println("max voted player(s) :");
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        System.out.println("player(s) with maximum number of votes:");
 
-        for (int i = 0, j = 0; i < numberOfPlayers; i++) {
+        for (int i = 0, j = 0; i < NUMBER_OF_PLAYERS; i++) {
             if (players[i].numberOfVotes == findMaxVote()) {
                 maxPlayers[j] = players[i];
                 j++;
-                System.err.print(players[i].name + "  ");
+                System.out.print(players[i].getName() + "  ");
             }
+            System.out.println();
+            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         }
 
         System.out.println();
@@ -100,7 +133,7 @@ public class Main {
     }
 
 
-    //                *#*#*   MAIN PART   *#*#*
+    //  ---------------    -*#*#*   MAIN PART   *#*#*-    -------------- //
     public static void main(String[] args) throws InterruptedException {
         Scanner scanner = new Scanner(System.in);
 
@@ -130,19 +163,19 @@ public class Main {
         System.out.println("game created successfully! please assign a role to each player");
 
         // set number of players and print it !
-        numberOfPlayers = beginningDate.length - 1;
-        System.out.println("number of players : " + numberOfPlayers);
+        NUMBER_OF_PLAYERS = beginningDate.length - 1;
+        System.out.println("number of players : " + NUMBER_OF_PLAYERS);
 
         // makes each player
-        for (int i = 0; i < numberOfPlayers; i++) {
+        for (int i = 0; i < NUMBER_OF_PLAYERS; i++) {
             players[i] = new Player(beginningDate[i + 1]);
         }
 
         // this part will assign all the players a specific role .
         // there is an int named "assignments" that counts numbers of assignments .
-        // this loop stops when the assignments will be equals with the numberOfPlayers.
+        // this loop stops when the assignments will be equals with the NUMBER_OF_PLAYERS.
         int assignments = 0;
-        while (assignments != numberOfPlayers) {
+        while (assignments != NUMBER_OF_PLAYERS) {
             String[] assignDate = scanner.nextLine().split(" ");
             // if "assign_role" command wasn't found , prints an error
             if (assignDate[0].equals("assign_role")) {
@@ -204,7 +237,7 @@ public class Main {
                 System.out.println();
             }
             System.out.println("Day " + Day.DAY_NUMBER++);
-
+            System.out.println();
 
             while (!input.equals("end_vote")) {
                 input = scanner.nextLine();
@@ -240,7 +273,7 @@ public class Main {
                 System.out.println();
             }
             System.out.println("Night " + Night.NIGHT_NUMBER++);
-            Thread.sleep(2000);
+            Thread.sleep(1000);
             Night.printNightPlayers();
 
             while (!input.equals("end_night")) {
