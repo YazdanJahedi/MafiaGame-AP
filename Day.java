@@ -74,7 +74,7 @@ public class Day extends Main {
             }
             // vetting vote part of the day :
             else if(!input.equals("end_vote")){
-                String[] voteDate = input.split(" ");
+                String[] voteDate = input.split("\s+");
                 Day.gettingVoteInTheDay(voteDate);
             }
         }
