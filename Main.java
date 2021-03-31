@@ -144,6 +144,48 @@ public class Main {
         System.out.println("use this example : create_game player_1 player_2 player_3 ...");
     }
 
+    /**
+     * this is the first thing that user should do !!! create_game
+     * <p>
+     * in this method user should inter players names.
+     * the game has a few rules for it.
+     * <p>
+     * at the end of this part , game knows number of players and also name of them.
+     */
+    public static void create_game() {
+        Scanner scanner = new Scanner(System.in);
+        String[] createGameDate;
+
+        /*
+         the fist command should be "create_game" : if was not : repeat!
+         also this part will fix the number of players.
+         if the number of players was less than 4 ,an alarm will be printed
+         */
+        do {
+            // this String[] will get the fist command of the game (starting command + players names)
+            // regex :\s+  ==> if the user use one or more than one space character in the line , it will be ignored
+            createGameDate = scanner.nextLine().split("\s+");
+            if (!createGameDate[0].equals("create_game")) {
+                System.err.println("no game created");
+                System.err.println("First please create a new game with the \"create_game\" command");
+            } else {
+                System.err.println("Number of players is less than required (minimum : 3 players)");
+            }
+        }
+        while (!createGameDate[0].equals("create_game") || createGameDate.length < 4);
+
+        // print notification massage!
+        System.out.println("game created successfully! please assign a role to each player");
+
+        // set number of players and print it !
+        NUMBER_OF_PLAYERS = createGameDate.length - 1;
+        System.out.println("number of players : " + NUMBER_OF_PLAYERS);
+
+        // makes each player in the game !
+        for (int i = 0; i < NUMBER_OF_PLAYERS; i++) {
+            players[i] = new Player(createGameDate[i + 1]);
+        }
+    }
 
     //  ---------------    -*#*#$   MAIN PART   $#*#*-    -------------- //
 
@@ -152,34 +194,8 @@ public class Main {
 
         printBeginningMassage();
 
-        // this String will get the fist command of the game (starting command + players names)
-        String[] beginningDate = scanner.nextLine().split(" ");
+        create_game();
 
-        // the fist command should be "create_game" : if was not : repeat!
-        // also this part will fix the number of players.  if the number of players was less than min , will print an alarm
-        while (!beginningDate[0].equals("create_game") || beginningDate.length < 4) {
-            if (!beginningDate[0].equals("create_game")) {
-                System.out.println("no game created");
-                System.err.println("first please create a new game with the \"create_game\" command");
-                System.err.println("try again...");
-            } else {
-                System.err.println("Number of players is less than required");
-            }
-            beginningDate = scanner.nextLine().split(" ");
-        }
-
-
-        // print alarm massage !
-        System.out.println("game created successfully! please assign a role to each player");
-
-        // set number of players and print it !
-        NUMBER_OF_PLAYERS = beginningDate.length - 1;
-        System.out.println("number of players : " + NUMBER_OF_PLAYERS);
-
-        // makes each player
-        for (int i = 0; i < NUMBER_OF_PLAYERS; i++) {
-            players[i] = new Player(beginningDate[i + 1]);
-        }
 
         // this part will assign all the players a specific role .
         // there is an int named "assignments" that counts numbers of assignments .
