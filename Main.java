@@ -133,6 +133,22 @@ public class Main {
     }
 
     /**
+     * this method will print the players in the game that don't have any role.
+     * to starting the game , all players should have a role
+     */
+    public static void printPlayersNotAssigned() {
+        System.out.println("** player(s) that don't have role: ");
+
+        for (int i = 0; i < NUMBER_OF_PLAYERS; i++) {
+            if(!players[i].isAssigned){
+                System.out.print(players[i].getName() + " ");
+            }
+        }
+        System.out.println();
+    }
+
+
+    /**
      * this method will print Welcoming massage and also
      * will print an explanation for the user , guide him how to use the code
      */
@@ -174,9 +190,6 @@ public class Main {
         }
         while (!createGameDate[0].equals("create_game") || createGameDate.length < 4);
 
-        // print notification massage!
-        System.out.println("game created successfully! please assign a role to each player");
-
         // set number of players and print it !
         NUMBER_OF_PLAYERS = createGameDate.length - 1;
         System.out.println("number of players : " + NUMBER_OF_PLAYERS);
@@ -187,6 +200,57 @@ public class Main {
         }
     }
 
+    /**
+     * all player must have a role before starting the game and
+     * this method will assign all the players a specific role.
+     * <p>
+     * this role assignment has a few rules
+     */
+    public static void assign_role() {
+        Scanner scanner = new Scanner(System.in);
+        // print notification massage!
+        System.out.println("Game created successfully! please assign a role to each player");
+        System.out.println("You can use this pattern : assign_role (player_name) (role_name)");
+        System.out.println("After all players had a role , you can start the game with this command : start_game");
+
+        // int "assignments" counts numbers of assignments .
+        int assignments = 0;
+        String[] assignDate;
+
+        do {
+            // \s+ ==> ignore all space characters
+            assignDate = scanner.nextLine().split("\s+");
+
+            // if "assign_role" command wasn't found , prints an error
+            if (assignDate[0].equals("assign_role")) {
+                // if player wasn't found , the method will print  : "user not found"
+                if (findPlayer(assignDate[1]) != null) {
+                    Player player = findPlayer(assignDate[1]);
+                    if (findRole(assignDate[2])) {
+                        if (player.setRole(assignDate[2])) {
+                            assignments++;
+                            player.isAssigned = true;
+
+                            if(assignments < NUMBER_OF_PLAYERS)
+                                printPlayersNotAssigned();
+                        }
+                    } else {
+                        System.err.println("role not found");
+                    }
+                } // else prints : user not found
+            } else if (assignDate[0].equals("start_game")) {
+                System.err.println("one or more player do not have a role , you can't start the game now!");
+            } else {
+                System.err.println("Assign a role to each player with the command \"assign_role\"");
+
+            }
+        }
+        // this loop stops when the assignments will be equals with the NUMBER_OF_PLAYERS.
+        while (assignments != NUMBER_OF_PLAYERS);
+
+    }
+
+
     //  ---------------    -*#*#$   MAIN PART   $#*#*-    -------------- //
 
     public static void main(String[] args) throws InterruptedException {
@@ -196,34 +260,8 @@ public class Main {
 
         create_game();
 
+        assign_role();
 
-        // this part will assign all the players a specific role .
-        // there is an int named "assignments" that counts numbers of assignments .
-        // this loop stops when the assignments will be equals with the NUMBER_OF_PLAYERS.
-        int assignments = 0;
-        while (assignments != NUMBER_OF_PLAYERS) {
-            String[] assignDate = scanner.nextLine().split(" ");
-            // if "assign_role" command wasn't found , prints an error
-            if (assignDate[0].equals("assign_role")) {
-                // if player wasn't found , the method will print  : "user not found"
-                if (findPlayer(assignDate[1]) != null) {
-                    // if role wasn't found , prints an error
-                    if (findRole(assignDate[2])) {
-                        if (findPlayer(assignDate[1]).setRole(assignDate[2])) {
-                            System.out.println("+");
-                            assignments++;
-                            System.out.println(assignments);
-                        }
-
-                    } else {
-                        System.out.println("role not found");
-                    }
-                }
-            } else {
-                System.err.println("please assign a role to each player with the command \"assign_role\"");
-                System.out.println("one or more player do not have a role");
-            }
-        }
         System.err.println("you have created game and also assigned roles . now you should start the game... use \"start_game\" command");
 
         // this is the String that gets the starting command
