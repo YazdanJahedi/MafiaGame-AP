@@ -3,12 +3,12 @@ import java.util.Scanner;
 public class Day extends Main {
     protected static int DAY_NUMBER = 1;
 
-
+    // this method will help the user find non-voted players easier
     public static void printPlayersHasNotVoted() {
         int numberOfPlayersHasNotVoted = 0;
         String[] names = new String[NUMBER_OF_PLAYERS];
         for (int i = 0; i < NUMBER_OF_PLAYERS; i++) {
-            if (!players[i].hasVoted && players[i].isAlive && !players[i].isSilenced) {
+            if (!players[i].hasVoted && players[i].isAlive && !players[i].isSilenced()) {
                 names[numberOfPlayersHasNotVoted++] = players[i].getName();
             }
         }
@@ -34,7 +34,7 @@ public class Day extends Main {
                 // voter part
                 if (voter.isAlive) {
                     if (!voter.hasVoted) {
-                        if (!voter.isSilenced) {
+                        if (!voter.isSilenced()) {
                             voter.hasVoted = true;
 
                             // votee part
@@ -70,12 +70,12 @@ public class Day extends Main {
             if (input.equals("get_game_state")) {
                 printGameState();
             } else if (input.startsWith("start_game")) {
-                System.out.println("game has already started");
+                System.err.println("game has already started");
             }
-            // vetting vote part of the day :
-            else if(!input.equals("end_vote")){
+            // getting vote part of the day :
+            else if (!input.equals("end_vote")) {
                 String[] voteDate = input.split("\s+");
-                Day.gettingVoteInTheDay(voteDate);
+                gettingVoteInTheDay(voteDate);
             }
         }
 
@@ -93,7 +93,7 @@ public class Day extends Main {
 
     public static void saveChangesAndReset() {
         for (int i = 0; i < NUMBER_OF_PLAYERS; i++) {
-            players[i].isSilenced = false;
+            players[i].setSilenced(false);
             players[i].resetVote();
         }
     }

@@ -5,7 +5,7 @@ public abstract class MafiasGroup extends Roles {
     // this is the last player that mafia has voted to him
     // this filed is used when the mafia wants to change his last vote .
     // in this situation we most knew that who was the player that mafia had voted before
-    protected Player lastPlayerThatMafiaHasVotedTo ;
+    protected Player lastPlayerThatMafiaHasVotedTo;
 
     protected MafiasGroup() {
         // all of the mafias are in the mafiaGroup :)

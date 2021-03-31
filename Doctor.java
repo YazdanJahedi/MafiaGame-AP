@@ -1,5 +1,10 @@
 public class Doctor extends VillagersGroup {
-    boolean hasCured = false;
+    /*
+        this field is used in the night part of the game.
+        this role can not cure more than one player in the night.
+        is this property was true, he can't cure again!
+     */
+    public boolean hasCured = false;
 
     public Doctor() {
         NUMBER_OF_VILLAGERS++;
@@ -16,11 +21,11 @@ public class Doctor extends VillagersGroup {
         if (player != null) {
             if (!hasCured) {
                 if (player.isAlive) {
-                    player.isChosenByDoctor = true;
+                    player.setChosenByDoctor(true);
                     hasCured = true;
-                    System.out.println("Doctor chose \"" + player.name + "\" to cure!");
+                    System.out.println("Doctor chose \"" + player.getName() + "\" to cure!");
                 } else {
-                    System.out.println("user already is dead");
+                    System.err.println("user already is dead");
                 }
             } else {
                 System.err.println("doctor has chosen a player before!!");

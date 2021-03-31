@@ -3,6 +3,7 @@ import java.util.Scanner;
 public class Night extends Main {
     protected static int NIGHT_NUMBER = 1;
 
+
     public static void printNightPlayers() {
         System.out.println("_____________________________");
         System.out.println("** ALIVE NIGHT PLAYERS :");
@@ -16,9 +17,7 @@ public class Night extends Main {
 
     public static boolean isNightPlayer(String name) {
         if (findPlayer(name) != null) {
-            if (findPlayer(name).role.isNightPlayer) {
-                return true;
-            }
+            return findPlayer(name).role.isNightPlayer;
         }
         return false;
     }
@@ -26,21 +25,21 @@ public class Night extends Main {
     public static void gettingVoteInTheNight(String[] voteData) {
         if (voteData.length == 2) {
             if (findPlayer(voteData[1]) != null) {
+
                 Player mafia = findPlayer(voteData[0]);
                 Player target = findPlayer(voteData[1]);
 
-
-                // target part
                 if (target.isAlive) {
+
                     target.hasBeenVoted();
 
                     if (!mafia.hasVoted) {
                         mafia.hasVoted = true;
                         System.out.println(mafia.getName() + " (" + mafia.role + ") voted to " + target.getName() + " (" + target.role + ")");
+
                     } else {
                         System.out.println(mafia.getName() + " (" + mafia.role + ") changed his vote to " + target.getName());
-                        ((MafiasGroup) mafia.role).getLastPlayerThatMafiaHasVotedTo().takeBackedTheVote();
-
+                        ((MafiasGroup) mafia.role).getLastPlayerThatMafiaHasVotedTo().takeBackTheVote();
                     }
 
                     ((MafiasGroup) mafia.role).setLastPlayerThatMafiaHasVotedTo(target);
@@ -48,9 +47,7 @@ public class Night extends Main {
                 } else {
                     System.err.println("target already dead");
                 }
-
             }
-
         } else {
             System.err.println("input is incorrect. you should inter votes like this pattern: (mafia_name) (target_name)");
 
@@ -64,39 +61,26 @@ public class Night extends Main {
             Player firstPlayer = findPlayer(voteDate[0]);
 
             if (firstPlayer.isAlive) {
-                if (Night.isNightPlayer(voteDate[0])) {
+                if (isNightPlayer(voteDate[0])) {
 
                     // if was silencer (has a special ability in the night)
                     if (firstPlayer.role instanceof Silencer && !((Silencer) firstPlayer.role).hasSilenced) {
                         ((Silencer) firstPlayer.role).silence(voteDate[1]);
                     }
                     // if was non-special ability mafia in the night (mafia & godfather & non-voted silencer!!)
-                    else if (firstPlayer.role.isMafia) {
-
-                        Night.gettingVoteInTheNight(voteDate);
-
-                        // todo : chand bar ray bede ........
-                    }
-
-                    if (firstPlayer.role instanceof Doctor) {
-
+                    else if (firstPlayer.role instanceof MafiasGroup) {
+                        gettingVoteInTheNight(voteDate);
+                    } else if (firstPlayer.role instanceof Doctor) {
                         ((Doctor) firstPlayer.role).cure(findPlayer(voteDate[1]));
-
-                    }
-
-                    if (firstPlayer.role instanceof Detective) {
-                        if (!((Detective) firstPlayer.role).hasAsked) {
+                    } else if (firstPlayer.role instanceof Detective) {
                             ((Detective) firstPlayer.role).inquiry(findPlayer(voteDate[1]));
-                        } else {
-                            System.err.println("detective has already asked");
-                        }
                     }
 
                 } else {
                     System.err.println("user can not wake up during night");
                 }
             } else {
-                System.out.println("user is dead");
+                System.err.println("user is dead");
             }
         }
     }
@@ -110,7 +94,7 @@ public class Night extends Main {
             if (input.equals("get_game_state")) {
                 printGameState();
             } else if (input.startsWith("start_game")) {
-                System.out.println("game has already started");
+                System.err.println("game has already started");
             }
             //  voting for mafia and do night_players abilities!
             else if (!input.startsWith("end_night")) {
@@ -134,15 +118,15 @@ public class Night extends Main {
         System.out.println();
 
         if (maxPlayers.length == 1) {
-            if (maxPlayers[0].isChosenByDoctor) {
+            if (maxPlayers[0].isChosenByDoctor()) {
                 System.out.println("Doctor saved !!");
             } else {
                 maxPlayers[0].isKilled();
             }
         } else if (maxPlayers.length == 2) {
-            if (!maxPlayers[0].isChosenByDoctor && !maxPlayers[1].isChosenByDoctor) {
+            if (!maxPlayers[0].isChosenByDoctor() && !maxPlayers[1].isChosenByDoctor()) {
                 System.out.println("nobody is killed");
-            } else if (maxPlayers[0].isChosenByDoctor) {
+            } else if (maxPlayers[0].isChosenByDoctor()) {
                 maxPlayers[1].isKilled();
             } else {
                 maxPlayers[0].isKilled();
@@ -151,15 +135,14 @@ public class Night extends Main {
             System.out.println("mafias couldn't decide who would be kiiled in the Night...");
             System.out.println("nobody is killed");
         }
-
     }
 
     public static void saveChangesAndReset() {
         for (int i = 0; i < NUMBER_OF_PLAYERS; i++) {
             players[i].resetVote();
-            players[i].isChosenByDoctor = false;
+            players[i].setChosenByDoctor(false);
 
-            if (players[i].isSilenced && players[i].isAlive) {
+            if (players[i].isSilenced() && players[i].isAlive) {
                 System.out.println(players[i].getName() + "  is silenced");
             }
             if (players[i].role instanceof Doctor) {

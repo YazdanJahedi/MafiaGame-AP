@@ -1,4 +1,4 @@
-public class Villager extends VillagersGroup{
+public class Villager extends VillagersGroup {
 
     public Villager() {
         /*

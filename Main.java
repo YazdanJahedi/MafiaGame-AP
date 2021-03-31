@@ -1,4 +1,4 @@
-//  the repository URL address for this project:
+//  the repository's URL address for this project:
 //  https://github.com/YazdanJahedi/MafiaGame-AP
 
 import java.util.Scanner;
@@ -81,8 +81,8 @@ public class Main {
     public static int findMaxVote() {
         int max = 0;
         for (int i = 0; i < NUMBER_OF_PLAYERS; i++) {
-            if (players[i].numberOfVotes > max) {
-                max = players[i].numberOfVotes;
+            if (players[i].getNumberOfVotes() > max) {
+                max = players[i].getNumberOfVotes();
             }
         }
 
@@ -100,7 +100,7 @@ public class Main {
     public static int findNumberOfMaxPlayers() {
         int numberOfMaxPlayer = 0;
         for (int i = 0; i < NUMBER_OF_PLAYERS; i++) {
-            if (players[i].numberOfVotes == findMaxVote()) {
+            if (players[i].getNumberOfVotes() == findMaxVote()) {
                 numberOfMaxPlayer++;
             }
         }
@@ -123,7 +123,7 @@ public class Main {
 
         if (findMaxVote() != 0) {
             for (int i = 0, j = 0; i < NUMBER_OF_PLAYERS; i++) {
-                if (players[i].numberOfVotes == findMaxVote()) {
+                if (players[i].getNumberOfVotes() == findMaxVote()) {
                     maxPlayers[j] = players[i];
                     j++;
                     System.out.print(players[i].getName() + "  ");
@@ -147,7 +147,7 @@ public class Main {
         System.out.println("** player(s) that don't have role: ");
 
         for (int i = 0; i < NUMBER_OF_PLAYERS; i++) {
-            if (!players[i].isAssigned) {
+            if (!players[i].isAssigned()) {
                 System.out.print(players[i].getName() + " ");
             }
         }
@@ -191,7 +191,7 @@ public class Main {
             if (!createGameDate[0].equals("create_game")) {
                 System.err.println("no game created");
                 System.err.println("First please create a new game with the \"create_game\" command");
-            } else {
+            } else if (createGameDate.length < 4) {
                 System.err.println("Number of players is less than required (minimum : 3 players)");
             }
         }
@@ -234,12 +234,16 @@ public class Main {
                 if (findPlayer(assignDate[1]) != null) {
                     Player player = findPlayer(assignDate[1]);
                     if (findRole(assignDate[2])) {
-                        if (player.setRole(assignDate[2])) {
-                            assignments++;
-                            player.isAssigned = true;
+                        if (!player.isAssigned()) {
+                            if (player.setRole(assignDate[2])) {
+                                assignments++;
+                                player.setAssigned(true);
 
-                            if (assignments < NUMBER_OF_PLAYERS)
-                                printPlayersNotAssigned();
+                                if (assignments < NUMBER_OF_PLAYERS)
+                                    printPlayersNotAssigned();
+                            }
+                        } else {
+                            System.err.println("player already has a role");
                         }
                     } else {
                         System.err.println("role not found");
@@ -281,9 +285,9 @@ public class Main {
         printGameState();
 
         System.out.print("Ready? ");
-        Thread.sleep(800);
+        Thread.sleep(1000);
         System.out.print("Set! ");
-        Thread.sleep(500);
+        Thread.sleep(1000);
         System.out.print("GO ...");
         System.out.println();
     }
@@ -342,14 +346,21 @@ public class Main {
             if (Night.NIGHT_NUMBER > 1) {
                 Night.killInTheNight();
                 Night.saveChangesAndReset();
+                System.out.println();
+                //    ---- end game condition -----
+                if (MafiasGroup.NUMBER_OF_MAFIAS >= VillagersGroup.NUMBER_OF_VILLAGERS
+                        || MafiasGroup.NUMBER_OF_MAFIAS == 0 || Joker.hangedInDay) {
+                    break;
+                }
             }
+
 
             Day.DayTimeVote();
             Day.hangInTheDay();
             Day.saveChangesAndReset();
 
 
-            //    ---- middle condition -----
+            //    ---- end game condition -----
             if (MafiasGroup.NUMBER_OF_MAFIAS >= VillagersGroup.NUMBER_OF_VILLAGERS
                     || MafiasGroup.NUMBER_OF_MAFIAS == 0 || Joker.hangedInDay) {
                 break;
